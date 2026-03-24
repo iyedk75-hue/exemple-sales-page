@@ -20,51 +20,51 @@ export default function ContactForm() {
   };
 
   return (
-    <section id="contact" className="py-24 bg-[#A67C52]">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center text-white mb-16">
-          <h2 className="text-4xl lg:text-6xl font-bold mb-6">Pronto per il grande salto?</h2>
-          <p className="text-white/80 text-xl">
+    <section id="contact" className="py-16 sm:py-20 lg:py-24 bg-[#A67C52]">
+      <div className="max-w-7xl mx-auto px-5 sm:px-6">
+        <div className="text-center text-white mb-12 sm:mb-16">
+          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6">Pronto per il grande salto?</h2>
+          <p className="text-white/80 text-base sm:text-xl">
             Prenota il tuo sopralluogo gratuito. Solo 3 slot rimasti per questo mese.
           </p>
         </div>
 
-        <div className="bg-white rounded-[3rem] shadow-2xl overflow-hidden grid lg:grid-cols-5">
-          <div className="lg:col-span-2 bg-[#1A1A1A] p-12 text-white">
+        <div className="bg-white rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden grid lg:grid-cols-5">
+          <div className="lg:col-span-2 bg-[#1A1A1A] px-7 py-10 sm:px-10 sm:py-12 lg:p-12 text-white">
             <h3 className="text-2xl font-bold mb-8">Contatti Diretti</h3>
             <div className="space-y-8">
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center">
+              <div className="flex items-center gap-4 sm:gap-5">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0">
                   <Phone className="w-6 h-6 text-[#E6C9A8]" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Chiamaci</div>
-                  <div className="text-xl font-bold">+39 351 963 1564</div>
+                  <div className="text-lg sm:text-xl font-bold">+39 351 963 1564</div>
                 </div>
               </div>
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center">
+              <div className="flex items-center gap-4 sm:gap-5">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0">
                   <Mail className="w-6 h-6 text-[#E6C9A8]" />
                 </div>
-                <div>
+                <div className="min-w-0 flex-1">
                   <div className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Email</div>
-                  <div className="text-xl font-bold">mahmoudsassi2077@gmail.com</div>
+                  <div className="text-lg sm:text-xl font-bold break-all">mahmoudsassi2077@gmail.com</div>
                 </div>
               </div>
-              <div className="flex items-center gap-5">
-                <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center">
+              <div className="flex items-center gap-4 sm:gap-5">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0">
                   <MapPin className="w-6 h-6 text-[#E6C9A8]" />
                 </div>
-                <div>
+                <div className="min-w-0">
                   <div className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Sede</div>
-                  <div className="text-xl font-bold">Milano, Italia</div>
+                  <div className="text-lg sm:text-xl font-bold">Milano, Italia</div>
                 </div>
               </div>
             </div>
 
-            <div className="mt-12 pt-8 border-t border-white/10">
+            <div className="mt-10 sm:mt-12 pt-8 border-t border-white/10">
               <p className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-5">Seguici sui Social</p>
-              <div className="flex gap-4">
+              <div className="flex flex-wrap gap-4">
                 <a
                   href="https://facebook.com/elitecartongesso"
                   target="_blank"
@@ -102,7 +102,7 @@ export default function ContactForm() {
               </div>
             </div>
 
-            <div className="mt-20 p-8 bg-[#E6C9A8]/10 rounded-3xl border border-white/5">
+            <div className="mt-12 sm:mt-16 lg:mt-20 p-6 sm:p-8 bg-[#E6C9A8]/10 rounded-3xl border border-white/5">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
                 <span className="text-sm font-bold text-green-500 uppercase tracking-widest">Disponibili Ora</span>
@@ -113,15 +113,15 @@ export default function ContactForm() {
             </div>
           </div>
 
-          <div className="lg:col-span-3 p-12 lg:p-16">
-            <form onSubmit={handleSubmit} className="space-y-8">
-              <div className="grid md:grid-cols-2 gap-8">
+          <div className="lg:col-span-3 px-6 py-10 sm:px-10 sm:py-12 lg:p-16">
+            <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
+              <div className="grid md:grid-cols-2 gap-6 sm:gap-8">
                 <div className="space-y-3">
                   <label className="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Nome</label>
                   <input 
                     type="text" 
                     required
-                    className="w-full px-8 py-5 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-[#A67C52] transition-all text-lg"
+                    className="w-full px-6 py-4 sm:px-8 sm:py-5 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-[#A67C52] transition-all text-base sm:text-lg"
                     placeholder="Mario Rossi"
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
@@ -132,7 +132,7 @@ export default function ContactForm() {
                   <input 
                     type="tel" 
                     required
-                    className="w-full px-8 py-5 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-[#A67C52] transition-all text-lg"
+                    className="w-full px-6 py-4 sm:px-8 sm:py-5 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-[#A67C52] transition-all text-base sm:text-lg"
                     placeholder="+39 333..."
                     value={formData.phone}
                     onChange={(e) => setFormData({...formData, phone: e.target.value})}
@@ -145,7 +145,7 @@ export default function ContactForm() {
                 <input 
                   type="email" 
                   required
-                  className="w-full px-8 py-5 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-[#A67C52] transition-all text-lg"
+                  className="w-full px-6 py-4 sm:px-8 sm:py-5 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-[#A67C52] transition-all text-base sm:text-lg"
                   placeholder="mario@email.it"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -156,7 +156,7 @@ export default function ContactForm() {
                 <label className="text-xs font-black uppercase tracking-[0.2em] text-gray-400">Dettagli Progetto</label>
                 <textarea 
                   rows={4}
-                  className="w-full px-8 py-5 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-[#A67C52] transition-all text-lg resize-none"
+                  className="w-full px-6 py-4 sm:px-8 sm:py-5 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-[#A67C52] transition-all text-base sm:text-lg resize-none"
                   placeholder="Cosa vorresti realizzare?"
                   value={formData.message}
                   onChange={(e) => setFormData({...formData, message: e.target.value})}
@@ -165,7 +165,7 @@ export default function ContactForm() {
 
               <button 
                 type="submit"
-                className="w-full bg-[#1A1A1A] text-white py-6 rounded-2xl font-black text-xl hover:bg-[#333] transition-all shadow-2xl shadow-black/20 flex items-center justify-center gap-4 group"
+                className="w-full bg-[#1A1A1A] text-white py-5 sm:py-6 rounded-2xl font-black text-lg sm:text-xl hover:bg-[#333] transition-all shadow-2xl shadow-black/20 flex items-center justify-center gap-3 sm:gap-4 group"
               >
                 <Mail className="w-6 h-6" />
                 Inviaci un'Email
@@ -182,7 +182,7 @@ export default function ContactForm() {
                 href="https://wa.me/393519631564?text=Ciao%21%20Vorrei%20un%20preventivo%20per%20un%20progetto%20in%20cartongesso.%20Grazie%21"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full bg-[#25D366] text-white py-5 rounded-2xl font-bold text-lg hover:bg-[#1EBE5A] transition-all shadow-xl shadow-green-500/15 flex items-center justify-center gap-3 group"
+                className="w-full bg-[#25D366] text-white py-5 rounded-2xl font-bold text-base sm:text-lg hover:bg-[#1EBE5A] transition-all shadow-xl shadow-green-500/15 flex items-center justify-center gap-3 group"
               >
                 <svg viewBox="0 0 32 32" className="w-6 h-6 fill-white shrink-0" xmlns="http://www.w3.org/2000/svg">
                   <path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.5 1.129 6.744 3.047 9.379L1.054 31.25l6.088-1.953A15.91 15.91 0 0 0 16.004 32C24.826 32 32 24.822 32 16S24.826 0 16.004 0Zm9.335 22.594c-.39 1.1-1.932 2.013-3.178 2.28-.852.18-1.964.324-5.71-1.228-4.796-1.987-7.882-6.86-8.121-7.18-.23-.32-1.932-2.573-1.932-4.907s1.223-3.478 1.657-3.955c.434-.477.949-.597 1.264-.597.316 0 .63.003.906.016.29.014.68-.11 1.064.813.39.937 1.327 3.24 1.443 3.475.117.234.195.508.039.813-.156.312-.234.504-.468.777-.234.273-.492.61-.703.82-.234.234-.477.488-.205.957.273.469 1.213 2 2.604 3.24 1.787 1.592 3.293 2.085 3.762 2.319.469.234.742.195 1.016-.117.273-.312 1.172-1.365 1.484-1.836.312-.468.625-.39 1.055-.234.434.156 2.734 1.29 3.203 1.525.469.234.781.351.898.546.117.195.117 1.133-.273 2.233Z"/>
@@ -191,7 +191,7 @@ export default function ContactForm() {
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </a>
 
-              <p className="text-center text-sm text-gray-400 font-medium">
+              <p className="text-center text-sm text-gray-400 font-medium px-2">
                 Rispondiamo solitamente entro 2 ore lavorative.
               </p>
             </form>
