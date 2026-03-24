@@ -12,7 +12,11 @@ export default function ContactForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Grazie! La tua richiesta è stata inviata. Ti contatteremo entro 24 ore.');
+    const subject = encodeURIComponent(`Richiesta Sopralluogo - ${formData.name}`);
+    const body = encodeURIComponent(
+      `Nome: ${formData.name}\nTelefono: ${formData.phone}\nEmail: ${formData.email}\n\nDettagli Progetto:\n${formData.message}`
+    );
+    window.location.href = `mailto:mahmoudsassi2077@gmail.com?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -44,7 +48,7 @@ export default function ContactForm() {
                 </div>
                 <div>
                   <div className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Email</div>
-                  <div className="text-xl font-bold">iyedk75@gmail.com</div>
+                  <div className="text-xl font-bold">mahmoudsassi2077@gmail.com</div>
                 </div>
               </div>
               <div className="flex items-center gap-5">
@@ -163,7 +167,8 @@ export default function ContactForm() {
                 type="submit"
                 className="w-full bg-[#1A1A1A] text-white py-6 rounded-2xl font-black text-xl hover:bg-[#333] transition-all shadow-2xl shadow-black/20 flex items-center justify-center gap-4 group"
               >
-                Richiedi Sopralluogo Gratuito
+                <Mail className="w-6 h-6" />
+                Inviaci un'Email
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
               </button>
 
