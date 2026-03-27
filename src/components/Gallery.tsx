@@ -1,13 +1,17 @@
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
+import img1 from '../img/1.jpeg';
+import img2 from '../img/2.jpeg';
+import img3 from '../img/3.jpeg';
+import img4 from '../img/4.jpeg';
 
 const galleryItems = [
-  { title: "Living Minimalista", img: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&q=80&w=600" },
-  { title: "Soffitto a Isola LED", img: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&q=80&w=600" },
-  { title: "Libreria Integrata", img: "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&q=80&w=600" },
-  { title: "Camera da Letto Zen", img: "https://images.unsplash.com/photo-1616486341351-7973a6960c12?auto=format&fit=crop&q=80&w=600" },
-  { title: "Ufficio Acustico", img: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=600" },
-  { title: "Dettagli di Lusso", img: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80&w=600" }
+  { title: "Living Minimalista", img: img1 },
+  { title: "Soffitto a Isola LED", img: img2 },
+  { title: "Libreria Integrata", img: img3 },
+  { title: "Camera da Letto Zen", img: img4 },
+  { title: "Ufficio Acustico", img: img2 },
+  { title: "Dettagli di Lusso", img: img3 }
 ];
 
 export default function Gallery() {
