@@ -13,10 +13,7 @@ export default function Footer() {
         <div className="text-sm text-gray-400 font-medium leading-relaxed">
           © 2026 Elite Cartongesso S.R.L. • P.IVA 12345678901 • Milano
         </div>
-        <div className="flex gap-6 sm:gap-8">
-          <a href="#" className="text-gray-400 hover:text-[#A67C52] transition-colors font-bold text-xs uppercase tracking-widest">Privacy</a>
-          <a href="#" className="text-gray-400 hover:text-[#A67C52] transition-colors font-bold text-xs uppercase tracking-widest">Cookie</a>
-        </div>
+       
       </div>
     </footer>
   );

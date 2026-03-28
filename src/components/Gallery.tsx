@@ -4,14 +4,24 @@ import img1 from '../img/1.jpeg';
 import img2 from '../img/2.jpeg';
 import img3 from '../img/3.jpeg';
 import img4 from '../img/4.jpeg';
+import img5 from '../img/5.jpeg';
+import img6 from '../img/6.jpeg';
+import im6 from '../img/6.jpeg';
+import im7 from '../img/7.jpeg';
+import im8 from '../img/8.jpeg';
+import im9 from '../img/9.jpeg';
 
 const galleryItems = [
   { title: "Living Minimalista", img: img1 },
   { title: "Soffitto a Isola LED", img: img2 },
   { title: "Libreria Integrata", img: img3 },
   { title: "Camera da Letto Zen", img: img4 },
-  { title: "Ufficio Acustico", img: img2 },
-  { title: "Dettagli di Lusso", img: img3 }
+  { title: "Ufficio Acustico", img: img5 },
+  { title: "Dettagli di Lusso", img: img6 },
+  { title: "Parete Decorativa", img: im7 },
+  { title: "Bagno Moderno", img: im8 },
+  { title: "Soffitto a Cielo Stellato", img: im9 },
+
 ];
 
 export default function Gallery() {
