@@ -63,10 +63,14 @@ export default function WhatsAppButton() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >
-          <svg viewBox="0 0 32 32" className="w-6 h-6 sm:w-7 sm:h-7 fill-white shrink-0" xmlns="http://www.w3.org/2000/svg">
+          {/* Pulse rings */}
+          <span className="pulse-ring" aria-hidden="true" />
+          <span className="pulse-ring-delay" aria-hidden="true" />
+
+          <svg viewBox="0 0 32 32" className="w-6 h-6 sm:w-7 sm:h-7 fill-white shrink-0 relative z-10" xmlns="http://www.w3.org/2000/svg">
             <path d="M16.004 0h-.008C7.174 0 0 7.176 0 16c0 3.5 1.129 6.744 3.047 9.379L1.054 31.25l6.088-1.953A15.91 15.91 0 0 0 16.004 32C24.826 32 32 24.822 32 16S24.826 0 16.004 0Zm9.335 22.594c-.39 1.1-1.932 2.013-3.178 2.28-.852.18-1.964.324-5.71-1.228-4.796-1.987-7.882-6.86-8.121-7.18-.23-.32-1.932-2.573-1.932-4.907s1.223-3.478 1.657-3.955c.434-.477.949-.597 1.264-.597.316 0 .63.003.906.016.29.014.68-.11 1.064.813.39.937 1.327 3.24 1.443 3.475.117.234.195.508.039.813-.156.312-.234.504-.468.777-.234.273-.492.61-.703.82-.234.234-.477.488-.205.957.273.469 1.213 2 2.604 3.24 1.787 1.592 3.293 2.085 3.762 2.319.469.234.742.195 1.016-.117.273-.312 1.172-1.365 1.484-1.836.312-.468.625-.39 1.055-.234.434.156 2.734 1.29 3.203 1.525.469.234.781.351.898.546.117.195.117 1.133-.273 2.233Z"/>
           </svg>
-          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 rounded-full border-2 border-white animate-pulse" />
+          <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 rounded-full border-2 border-white animate-pulse z-20" />
         </motion.a>
       </div>
     </div>

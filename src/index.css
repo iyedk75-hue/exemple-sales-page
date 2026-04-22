@@ -5,6 +5,78 @@
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
+html, body, * {
+  cursor: none !important;
+}
+
 html {
   scroll-behavior: smooth;
+}
+
+/* ─── Shimmer skeleton animation ─── */
+@keyframes shimmer {
+  0% { background-position: -600px 0; }
+  100% { background-position: 600px 0; }
+}
+
+.skeleton-light {
+  background: linear-gradient(90deg, #f0ece8 25%, #e8e2db 50%, #f0ece8 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: 0.75rem;
+}
+
+.skeleton-dark {
+  background: linear-gradient(90deg, #2a2a2a 25%, #333333 50%, #2a2a2a 75%);
+  background-size: 600px 100%;
+  animation: shimmer 1.6s infinite linear;
+  border-radius: 0.75rem;
+}
+
+/* ─── Float animation (hero badge) ─── */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(3deg); }
+  50% { transform: translateY(-8px) rotate(5deg); }
+}
+
+.animate-float {
+  animation: float 3.5s ease-in-out infinite;
+}
+
+/* ─── Pulse ring (WhatsApp button) ─── */
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.pulse-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background-color: #25D366;
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+.pulse-ring-delay {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background-color: #25D366;
+  animation: pulse-ring 2s ease-out 0.7s infinite;
+}
+
+/* ─── Page loader bar ─── */
+@keyframes loader-bar {
+  0% { width: 0%; }
+  60% { width: 75%; }
+  100% { width: 100%; }
+}
+
+.loader-bar {
+  animation: loader-bar 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ─── Scroll-reveal helpers ─── */
+.will-animate {
+  will-change: transform, opacity;
 }
