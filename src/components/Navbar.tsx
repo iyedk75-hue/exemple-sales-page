@@ -29,6 +29,15 @@ export default function Navbar() {
 
   const closeMenu = () => setMenuOpen(false);
 
+  const handleMobileNav = (e: React.MouseEvent, href: string) => {
+    e.preventDefault();
+    closeMenu();
+    setTimeout(() => {
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 150);
+  };
+
   const navLinks = [
     { href: '#interest', label: 'Perché Noi' },
     { href: '#desire', label: 'Galleria' },
@@ -125,7 +134,7 @@ export default function Navbar() {
                     <motion.a
                       key={link.href}
                       href={link.href}
-                      onClick={closeMenu}
+                      onClick={(e) => handleMobileNav(e, link.href)}
                       className="px-3 py-3 rounded-2xl font-medium hover:bg-[#E6C9A8]/20 hover:text-[#A67C52] transition-colors"
                       initial={{ opacity: 0, x: -16 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -136,7 +145,7 @@ export default function Navbar() {
                   ))}
                   <motion.a
                     href="#contact"
-                    onClick={closeMenu}
+                    onClick={(e) => handleMobileNav(e, '#contact')}
                     className="mt-2 bg-[#1A1A1A] text-white px-4 py-3 rounded-full font-semibold text-center hover:bg-[#333] transition-colors"
                     initial={{ opacity: 0, x: -16 }}
                     animate={{ opacity: 1, x: 0 }}
