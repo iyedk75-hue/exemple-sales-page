@@ -1,22 +1,29 @@
 import { useRef } from 'react';
 import { motion, useScroll, useTransform, type Variants } from 'motion/react';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import img5 from '../img/5.jpeg';
+import img6 from '../img/6.jpeg';
+import img7 from '../img/7.jpeg';
 
 const containerVariants: Variants = {
   hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.12, delayChildren: 0.1 },
-  },
+  visible: { transition: { staggerChildren: 0.13, delayChildren: 0.1 } },
 };
 
 const itemVariants: Variants = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { opacity: 0, y: 40 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] },
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
   },
 };
+
+const stats = [
+  { value: '+250', label: 'Progetti completati' },
+  { value: '+10',  label: 'Anni di esperienza'  },
+  { value: '15%',  label: 'Sconto lancio'        },
+];
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -24,111 +31,136 @@ export default function Hero() {
     target: sectionRef,
     offset: ['start start', 'end start'],
   });
-  const imgY = useTransform(scrollYProgress, [0, 1], [0, -50]);
+  const imgY  = useTransform(scrollYProgress, [0, 1], [0, -70]);
 
   return (
     <section
       ref={sectionRef}
-      className="relative pt-24 pb-14 sm:pt-28 sm:pb-16 lg:pt-48 lg:pb-32 overflow-hidden"
+      className="relative min-h-screen flex flex-col justify-center pt-28 pb-20 sm:pt-32 lg:pt-40 lg:pb-28 overflow-hidden bg-[#FDFCFB]"
     >
-      <div className="max-w-7xl mx-auto px-5 sm:px-6 grid lg:grid-cols-2 gap-10 sm:gap-12 items-center">
-        {/* Text column */}
+      {/* Grain overlay */}
+      <div
+        className="pointer-events-none fixed inset-0 z-[1] opacity-[0.032]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundSize: '200px',
+        }}
+      />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 w-full">
+
+        {/* Centered text block */}
         <motion.div
+          className="text-center max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
-          <motion.div
+          <motion.p
             variants={itemVariants}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#E6C9A8]/30 text-[#A67C52] text-[10px] sm:text-xs font-bold uppercase tracking-widest mb-5 sm:mb-6"
-            animate={{ scale: [1, 1.04, 1] }}
-            transition={{ duration: 2.8, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+            className="text-[0.6rem] tracking-[0.32em] uppercase text-[#A67C52]/60 font-medium mb-8 sm:mb-10"
           >
-            <Sparkles className="w-3 h-3" />
-            L'Eccellenza del Cartongesso a Milano
-          </motion.div>
+            Eccellenza Artigianale &nbsp;·&nbsp; Milano
+          </motion.p>
 
           <motion.h1
             variants={itemVariants}
-            className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-[1.05] mb-6 sm:mb-8 tracking-tighter"
+            style={{ fontFamily: 'var(--font-display)' }}
+            className="text-[3.2rem] sm:text-[5rem] lg:text-[7rem] xl:text-[8.5rem] font-light leading-[0.92] tracking-[-0.01em] text-[#1A1A1A] mb-8 sm:mb-10"
           >
-            Basta pareti anonime. <br />
-            Crea un <span className="text-[#A67C52]">Capolavoro</span> in casa tua.
+            Basta pareti<br />
+            anonime. Crea{' '}
+            <em className="italic font-light text-[#A67C52]">un</em>
+            <br />
+            <span className="font-semibold">Capolavoro</span>
+            {' '}in casa tua.
           </motion.h1>
 
           <motion.p
             variants={itemVariants}
-            className="text-base sm:text-xl text-gray-600 mb-8 sm:mb-10 leading-relaxed max-w-lg"
+            className="text-sm sm:text-base text-[#1A1A1A]/45 max-w-lg mx-auto leading-relaxed mb-10 sm:mb-12 font-light"
           >
-            Smetti di sognare una casa da rivista. Realizziamo controsoffitti, pareti e arredi in
-            cartongesso con finiture di lusso e precisione millimetrica.
+            Realizziamo controsoffitti, pareti e arredi in cartongesso con finiture
+            di lusso e precisione millimetrica.
           </motion.p>
 
-          <motion.div variants={itemVariants} className="flex flex-col gap-4">
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
+          >
             <motion.a
               href="#contact"
-              className="flex items-center justify-center gap-2 bg-[#1A1A1A] text-white px-6 sm:px-10 py-4 sm:py-5 rounded-full font-bold text-base sm:text-lg shadow-xl shadow-black/10 text-center group"
-              whileHover={{ scale: 1.04 }}
+              className="inline-flex items-center gap-2 bg-[#1A1A1A] text-white px-8 py-4 rounded-full font-semibold text-sm tracking-wide group"
+              whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              Voglio un Preventivo Gratuito
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform duration-200" />
+              Preventivo Gratuito
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
             </motion.a>
-
-            <motion.div variants={itemVariants} className="flex items-center gap-3 px-1 sm:px-2">
-              <div className="flex -space-x-2">
-                {[1, 2, 3].map((i) => (
-                  <motion.img
-                    key={i}
-                    src={`https://picsum.photos/seed/face${i}/100/100`}
-                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border-2 border-white shadow-sm"
-                    alt="Client"
-                    referrerPolicy="no-referrer"
-                    initial={{ opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.9 + i * 0.1 }}
-                  />
-                ))}
-              </div>
-              <p className="text-xs sm:text-sm font-medium text-gray-500 leading-relaxed">
-                <span className="text-[#1A1A1A] font-bold">+250</span> progetti completati con
-                successo
-              </p>
-            </motion.div>
+            <motion.a
+              href="#desire"
+              className="inline-flex items-center gap-2 border border-[#1A1A1A]/12 text-[#1A1A1A]/60 px-8 py-4 rounded-full text-sm tracking-wide font-medium hover:border-[#A67C52]/40 hover:text-[#A67C52] transition-colors duration-300"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              Scopri i nostri lavori
+            </motion.a>
           </motion.div>
         </motion.div>
 
-        {/* Image column */}
+        {/* 3-image editorial mosaic */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.94 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="relative"
+          style={{ y: imgY }}
+          className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-5 max-w-5xl mx-auto"
+          initial={{ opacity: 0, y: 60 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
         >
-          <motion.div
-            style={{ y: imgY }}
-            className="aspect-[4/5] rounded-[2rem] sm:rounded-[3rem] overflow-hidden shadow-2xl border-[6px] sm:border-8 border-white"
-          >
+          <div className="aspect-[3/4] rounded-2xl overflow-hidden">
             <img
-              src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1000"
-              alt="Luxury Drywall Design"
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
+              src={img6}
+              alt="Dettagli di lusso"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
             />
-          </motion.div>
-
-          {/* Floating discount badge */}
-          <motion.div
-            className="absolute top-4 right-4 sm:-top-8 sm:-right-8 bg-[#A67C52] text-white p-5 sm:p-8 rounded-[1.5rem] sm:rounded-3xl shadow-2xl max-w-[150px] sm:max-w-none animate-float"
-            initial={{ opacity: 0, scale: 0.7, rotate: -8 }}
-            animate={{ opacity: 1, scale: 1, rotate: 3 }}
-            transition={{ duration: 0.6, delay: 0.9, type: 'spring', stiffness: 180, damping: 14 }}
-          >
-            <div className="text-3xl sm:text-4xl font-black mb-1">15%</div>
-            <div className="text-xs font-bold uppercase tracking-widest opacity-80">Sconto Lancio</div>
-            <div className="text-[10px] mt-2 opacity-60">Scade tra 7 giorni</div>
-          </motion.div>
+          </div>
+          <div className="aspect-[3/5] rounded-2xl overflow-hidden -mt-8 sm:-mt-14 shadow-2xl shadow-[#A67C52]/10 border-4 border-white">
+            <img
+              src={img5}
+              alt="Luxury drywall finish"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            />
+          </div>
+          <div className="aspect-[3/4] rounded-2xl overflow-hidden">
+            <img
+              src={img7}
+              alt="Architettura in cartongesso"
+              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
+            />
+          </div>
         </motion.div>
+
+        {/* Stats bar */}
+        <motion.div
+          className="flex flex-wrap items-center justify-center gap-10 sm:gap-16 mt-12 sm:mt-16 pt-8 border-t border-[#1A1A1A]/[0.06]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.0 }}
+        >
+          {stats.map(({ value, label }) => (
+            <div key={label} className="text-center">
+              <div
+                style={{ fontFamily: 'var(--font-display)' }}
+                className="text-3xl sm:text-4xl font-semibold text-[#1A1A1A] tracking-tight leading-none"
+              >
+                {value}
+              </div>
+              <div className="text-[0.6rem] text-[#1A1A1A]/40 uppercase tracking-[0.18em] mt-2">
+                {label}
+              </div>
+            </div>
+          ))}
+        </motion.div>
+
       </div>
     </section>
   );
