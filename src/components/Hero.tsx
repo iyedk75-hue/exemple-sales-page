@@ -5,9 +5,24 @@ import img5 from '../img/5.jpeg';
 import img6 from '../img/6.jpeg';
 import img7 from '../img/7.jpeg';
 
+/* ── Word-by-word mask reveal ─────────────────────────── */
+const wordReveal: Variants = {
+  hidden: { y: '115%', opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const headingContainer: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
+};
+
 const containerVariants: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.13, delayChildren: 0.1 } },
+  visible: { transition: { staggerChildren: 0.15, delayChildren: 0.1 } },
 };
 
 const itemVariants: Variants = {
@@ -23,6 +38,20 @@ const stats = [
   { value: '+250', label: 'Progetti completati' },
   { value: '+10',  label: 'Anni di esperienza'  },
   { value: '15%',  label: 'Sconto lancio'        },
+];
+
+type WordToken = { text: string; className?: string; gold?: boolean };
+
+const h1Lines: WordToken[][] = [
+  [{ text: 'Basta' }, { text: 'pareti' }],
+  [{ text: 'anonime.' }, { text: 'Crea' }],
+  [{ text: 'un', className: 'italic font-light', gold: true }],
+  [
+    { text: 'Capolavoro', className: 'font-semibold' },
+    { text: 'in' },
+    { text: 'casa' },
+    { text: 'tua.' },
+  ],
 ];
 
 export default function Hero() {
@@ -50,34 +79,75 @@ export default function Hero() {
       <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 w-full">
 
         {/* Centered text block */}
-        <motion.div
-          className="text-center max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24"
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
+        <div className="text-center max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24">
+          {/* Eyebrow — letter-spacing expand */}
           <motion.p
-            variants={itemVariants}
-            className="text-[0.6rem] tracking-[0.32em] uppercase text-[#A67C52]/60 font-medium mb-8 sm:mb-10"
+            initial={{ opacity: 0, y: 18, letterSpacing: '0.04em' }}
+            animate={{ opacity: 1, y: 0, letterSpacing: '0.32em' }}
+            transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="text-[0.6rem] uppercase text-[#A67C52]/60 font-medium mb-8 sm:mb-10"
           >
             Eccellenza Artigianale &nbsp;·&nbsp; Milano
           </motion.p>
 
-          <motion.h1
-            variants={itemVariants}
+          {/* H1 — word-by-word slide-up mask (explicit delays) */}
+          <h1
             style={{ fontFamily: 'var(--font-display)' }}
-            className="text-[3.2rem] sm:text-[5rem] lg:text-[7rem] xl:text-[8.5rem] font-light leading-[0.92] tracking-[-0.01em] text-[#1A1A1A] mb-8 sm:mb-10"
+            className="text-[3.2rem] sm:text-[5rem] lg:text-[7rem] xl:text-[8.5rem] font-light leading-[1.05] tracking-[-0.01em] text-[#1A1A1A] mb-8 sm:mb-10"
           >
-            Basta pareti<br />
-            anonime. Crea{' '}
-            <em className="italic font-light text-[#A67C52]">un</em>
-            <br />
-            <span className="font-semibold">Capolavoro</span>
-            {' '}in casa tua.
-          </motion.h1>
+            {(() => {
+              let wordIdx = 0;
+              let charIdx = 0;
+              return h1Lines.map((line, li) => (
+                <div key={li} className="flex justify-center flex-wrap" style={{ gap: '0 0.28em' }}>
+                  {line.map((token) => {
+                    const wordDelay = 0.05 + wordIdx++ * 0.08;
+                    return (
+                      /* overflow:hidden clips the word during entrance */
+                      <span
+                        key={token.text}
+                        style={{ display: 'inline-block', overflow: 'hidden', verticalAlign: 'bottom', lineHeight: '1.2' }}
+                      >
+                        {/* word slides up from mask on entrance */}
+                        <motion.span
+                          initial={{ y: '110%', opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ duration: 0.85, delay: wordDelay, ease: [0.16, 1, 0.3, 1] }}
+                          className={token.className}
+                          style={{ display: 'inline-flex', ...(token.gold ? { color: '#A67C52' } : {}) }}
+                        >
+                          {/* each character waves after entrance */}
+                          {token.text.split('').map((char) => {
+                            const ci = charIdx++;
+                            return (
+                              <motion.span
+                                key={ci}
+                                animate={{ y: [0, -8, 0] }}
+                                transition={{
+                                  repeat: Infinity,
+                                  duration: 2.6,
+                                  delay: wordDelay + 0.9 + ci * 0.055,
+                                  ease: 'easeInOut',
+                                }}
+                                style={{ display: 'inline-block' }}
+                              >
+                                {char}
+                              </motion.span>
+                            );
+                          })}
+                        </motion.span>
+                      </span>
+                    );
+                  })}
+                </div>
+              ));
+            })()}
+          </h1>
 
           <motion.p
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="text-sm sm:text-base text-[#1A1A1A]/45 max-w-lg mx-auto leading-relaxed mb-10 sm:mb-12 font-light"
           >
             Realizziamo controsoffitti, pareti e arredi in cartongesso con finiture
@@ -85,7 +155,9 @@ export default function Hero() {
           </motion.p>
 
           <motion.div
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 1.05, ease: [0.16, 1, 0.3, 1] }}
             className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4"
           >
             <motion.a
@@ -106,7 +178,7 @@ export default function Hero() {
               Scopri i nostri lavori
             </motion.a>
           </motion.div>
-        </motion.div>
+        </div>
 
         {/* 3-image editorial mosaic */}
         <motion.div
