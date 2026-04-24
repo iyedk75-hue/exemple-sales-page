@@ -1,9 +1,19 @@
-import { useRef } from 'react';
-import { motion, useScroll, useTransform, type Variants } from 'motion/react';
-import { ArrowRight } from 'lucide-react';
+import { useRef, useState, useMemo, useEffect } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, type Variants } from 'motion/react';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import img1 from '../img/1.jpeg';
+import img2 from '../img/2.jpeg';
+import img3 from '../img/3.jpeg';
+import img4 from '../img/4.jpeg';
 import img5 from '../img/5.jpeg';
 import img6 from '../img/6.jpeg';
 import img7 from '../img/7.jpeg';
+import img8 from '../img/8.jpeg';
+import img9 from '../img/9.jpeg';
+import img22 from '../img/22.jpeg';
+import img23 from '../img/23.jpeg';
+import img24 from '../img/24.jpeg';
+import img25 from '../img/25.jpeg';
 
 /* ── Word-by-word mask reveal ─────────────────────────── */
 const wordReveal: Variants = {
@@ -54,8 +64,191 @@ const h1Lines: WordToken[][] = [
   ],
 ];
 
+const heroImages = [
+  { img: img1,  title: 'Curve Architettoniche',    category: 'Struttura'     },
+  { img: img2,  title: 'Ritmo e Divisione',        category: 'Divisori'      },
+  { img: img3,  title: 'Griglia Sospesa',          category: 'Soffitti'      },
+  { img: img4,  title: 'Precisione Strutturale',   category: 'Pareti'        },
+  { img: img5,  title: 'Maestria e Trasformazione',category: 'Milano'        },
+  { img: img6,  title: 'Dettagli di Lusso',        category: 'Finiture'      },
+  { img: img7,  title: 'Sagesse Antique',          category: 'Stile'         },
+  { img: img8,  title: 'Bagno Moderno',            category: 'Design'        },
+  { img: img9,  title: 'Soffitto a Cielo Stellato',category: 'Illuminazione' },
+  { img: img22, title: 'Eleganza Contemporanea',   category: 'Progetto'      },
+  { img: img23, title: 'Ambienti su Misura',       category: 'Arredo'        },
+  { img: img24, title: "Architettura d'Interni",   category: 'Interni'       },
+  { img: img25, title: 'Spazi Trasformati',        category: 'Lavori'        },
+];
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ── Vespa-style horizontal card carousel ──────────────── */
+function HeroCarousel() {
+  const items = useMemo(() => shuffleArray(heroImages), []);
+  const [current, setCurrent] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [paused, setPaused] = useState(false);
+  const n = items.length;
+
+  const goPrev = () => { setDirection(-1); setCurrent(i => (i - 1 + n) % n); };
+  const goNext = () => { setDirection(1);  setCurrent(i => (i + 1) % n); };
+
+  /* Auto-play — advances every 4s, pauses on hover/touch */
+  useEffect(() => {
+    if (paused) return;
+    const id = setInterval(() => {
+      setDirection(1);
+      setCurrent(i => (i + 1) % n);
+    }, 4000);
+    return () => clearInterval(id);
+  }, [paused, n]);
+
+  const prevIdx = (current - 1 + n) % n;
+  const nextIdx = (current + 1) % n;
+
+  const centerVariants: Variants = {
+    enter: (dir: number) => ({ x: dir > 0 ? '55%' : '-55%', opacity: 0, scale: 0.9 }),
+    center: {
+      x: 0, opacity: 1, scale: 1,
+      transition: { type: 'spring' as const, stiffness: 300, damping: 28, mass: 0.8 },
+    },
+    exit: (dir: number) => ({
+      x: dir > 0 ? '-55%' : '55%', opacity: 0, scale: 0.9,
+      transition: { duration: 0.28, ease: [0.36, 0, 0.66, -0.2] },
+    }),
+  };
+
+  return (
+    <div
+      className="relative w-full select-none overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={() => setPaused(true)}
+      onTouchEnd={() => setPaused(false)}
+    >
+      {/* ── Three-card peek row ── */}
+      <div className="flex items-stretch gap-3 sm:gap-4 -mx-[12%]">
+
+        {/* Left peek card */}
+        <motion.div
+          key={`left-${prevIdx}`}
+          className="flex-shrink-0 w-[28%] cursor-pointer relative overflow-hidden rounded-2xl sm:rounded-3xl"
+          animate={{ opacity: 0.5 }}
+          whileHover={{ opacity: 0.82 }}
+          transition={{ duration: 0.3 }}
+          onClick={goPrev}
+        >
+          <img src={items[prevIdx].img} alt={items[prevIdx].title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <motion.div
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/92 backdrop-blur-sm shadow-xl flex items-center justify-center"
+              animate={{ scale: [1, 1.14, 1] }}
+              transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
+              whileHover={{ scale: 1.24 }}
+            >
+              <ChevronLeft className="w-5 h-5 text-[#1A1A1A]" />
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Center card */}
+        <div className="flex-1 min-w-0 relative rounded-3xl overflow-hidden shadow-2xl shadow-[#A67C52]/15">
+          <AnimatePresence custom={direction} mode="wait">
+            <motion.div
+              key={current}
+              custom={direction}
+              variants={centerVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              className="aspect-[4/3] sm:aspect-[16/9] relative"
+            >
+              <img
+                src={items[current].img}
+                alt={items[current].title}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent flex flex-col justify-end p-5 sm:p-7">
+                <p className="text-[0.6rem] sm:text-[0.65rem] text-[#E6C9A8] uppercase tracking-[0.22em] font-medium mb-1.5">
+                  {items[current].category}
+                </p>
+                <h3
+                  style={{ fontFamily: 'var(--font-display)' }}
+                  className="text-white text-lg sm:text-xl lg:text-2xl font-semibold leading-tight"
+                >
+                  {items[current].title}
+                </h3>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Right peek card */}
+        <motion.div
+          key={`right-${nextIdx}`}
+          className="flex-shrink-0 w-[28%] cursor-pointer relative overflow-hidden rounded-2xl sm:rounded-3xl"
+          animate={{ opacity: 0.5 }}
+          whileHover={{ opacity: 0.82 }}
+          transition={{ duration: 0.3 }}
+          onClick={goNext}
+        >
+          <img src={items[nextIdx].img} alt={items[nextIdx].title} className="w-full h-full object-cover" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <motion.div
+              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/92 backdrop-blur-sm shadow-xl flex items-center justify-center"
+              animate={{ scale: [1, 1.14, 1] }}
+              transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut', delay: 0.6 }}
+              whileHover={{ scale: 1.24 }}
+            >
+              <ChevronRight className="w-5 h-5 text-[#1A1A1A]" />
+            </motion.div>
+          </div>
+        </motion.div>
+
+      </div>
+
+      {/* Dot indicators */}
+      <div className="flex justify-center gap-1.5 mt-4 sm:mt-5">
+        {items.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
+            className={`rounded-full transition-all duration-300 ${
+              i === current
+                ? 'w-5 h-1.5 bg-[#A67C52]'
+                : 'w-1.5 h-1.5 bg-[#1A1A1A]/20 hover:bg-[#1A1A1A]/40'
+            }`}
+          />
+        ))}
+      </div>
+
+      {/* Auto-play progress bar */}
+      {!paused && (
+        <div className="mt-3 mx-auto w-16 h-[2px] bg-[#1A1A1A]/10 rounded-full overflow-hidden">
+          <motion.div
+            key={current}
+            className="h-full bg-[#A67C52] rounded-full origin-left"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 4, ease: 'linear' }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [curtainGone, setCurtainGone] = useState(false);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
@@ -67,6 +260,46 @@ export default function Hero() {
       ref={sectionRef}
       className="relative min-h-screen flex flex-col justify-center pt-28 pb-20 sm:pt-32 lg:pt-40 lg:pb-28 overflow-hidden bg-[#FDFCFB]"
     >
+      {/* ── Cinematic curtain intro ── */}
+      {!curtainGone && (
+        <>
+          <motion.div
+            className="absolute inset-x-0 top-0 h-1/2 bg-[#1A1A1A] z-[60] pointer-events-none"
+            initial={{ y: 0 }}
+            animate={{ y: '-102%' }}
+            transition={{ duration: 1.1, delay: 1.7, ease: [0.76, 0, 0.24, 1] }}
+            onAnimationComplete={() => setCurtainGone(true)}
+          />
+          <motion.div
+            className="absolute inset-x-0 bottom-0 h-1/2 bg-[#1A1A1A] z-[60] pointer-events-none"
+            initial={{ y: 0 }}
+            animate={{ y: '102%' }}
+            transition={{ duration: 1.1, delay: 1.7, ease: [0.76, 0, 0.24, 1] }}
+          />
+          <motion.div
+            className="absolute inset-0 z-[65] flex items-center justify-center pointer-events-none"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 0 }}
+            transition={{ duration: 0.3, delay: 2.1 }}
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.35, delay: 1.72, ease: [0.16, 1, 0.3, 1] }}
+              className="text-center px-6"
+            >
+              <div
+                style={{ fontFamily: 'var(--font-display)' }}
+                className="text-white text-3xl sm:text-4xl font-light tracking-[0.15em] uppercase"
+              >
+                Elite <span className="text-[#E6C9A8] font-semibold">Cartongesso</span>
+              </div>
+              <div className="mt-2 h-[1px] w-full bg-gradient-to-r from-transparent via-[#A67C52] to-transparent" />
+            </motion.div>
+          </motion.div>
+        </>
+      )}
+
       {/* Grain overlay */}
       <div
         className="pointer-events-none fixed inset-0 z-[1] opacity-[0.032]"
@@ -180,35 +413,15 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* 3-image editorial mosaic */}
+        {/* ── Vespa-style carousel ── */}
         <motion.div
           style={{ y: imgY }}
-          className="grid grid-cols-3 gap-3 sm:gap-4 lg:gap-5 max-w-5xl mx-auto"
           initial={{ opacity: 0, y: 60 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-5xl mx-auto"
         >
-          <div className="aspect-[3/4] rounded-2xl overflow-hidden">
-            <img
-              src={img6}
-              alt="Dettagli di lusso"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-            />
-          </div>
-          <div className="aspect-[3/5] rounded-2xl overflow-hidden -mt-8 sm:-mt-14 shadow-2xl shadow-[#A67C52]/10 border-4 border-white">
-            <img
-              src={img5}
-              alt="Luxury drywall finish"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-            />
-          </div>
-          <div className="aspect-[3/4] rounded-2xl overflow-hidden">
-            <img
-              src={img7}
-              alt="Architettura in cartongesso"
-              className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-            />
-          </div>
+          <HeroCarousel />
         </motion.div>
 
         {/* Stats bar */}
