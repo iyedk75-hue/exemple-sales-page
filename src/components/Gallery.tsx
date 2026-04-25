@@ -7,7 +7,6 @@ import img3 from '../img/3.jpeg';
 import img4 from '../img/4.jpeg';
 import img5 from '../img/5.jpeg';
 import img6 from '../img/6.jpeg';
-import im6 from '../img/6.jpeg';
 import im7 from '../img/7.jpeg';
 import im8 from '../img/8.jpeg';
 import im9 from '../img/9.jpeg';
@@ -15,14 +14,14 @@ import { GalleryCardSkeleton } from './Skeleton';
 
 const galleryItems = [
   { title: "CURVE ARCHITETTONICHE: L'arte della cartongessatura strutturale", img: img1 },
-  { title: "RITMO E DIVISIONE: La prospettiva di un divisorio a binari", img: img2 },
-  { title: "GRIGLIA SOSPENSA: La rete per l'integrazione degli impianti", img: img3 },
-  { title: "PRECISIONE STRUTTURALE: I pannelli autoportanti in cartongesso", img: img4 },
-  { title: "Maestria e Trasformazione: Un Portfolio Milanese", img: img5 },
-  { title: "Dettagli di Lusso", img: img6 },
-  { title: "Sagesse Antique", img: im7 },
-  { title: "Bagno Moderno", img: im8 },
-  { title: "Soffitto a Cielo Stellato", img: im9 },
+  { title: "RITMO E DIVISIONE: La prospettiva di un divisorio a binari",      img: img2 },
+  { title: "GRIGLIA SOSPENSA: La rete per l'integrazione degli impianti",     img: img3 },
+  { title: "PRECISIONE STRUTTURALE: I pannelli autoportanti in cartongesso",  img: img4 },
+  { title: "Maestria e Trasformazione: Un Portfolio Milanese",                img: img5 },
+  { title: "Dettagli di Lusso",                                               img: img6 },
+  { title: "Sagesse Antique",                                                 img: im7 },
+  { title: "Bagno Moderno",                                                   img: im8 },
+  { title: "Soffitto a Cielo Stellato",                                       img: im9 },
 ];
 
 const containerVariants: Variants = {
@@ -31,7 +30,7 @@ const containerVariants: Variants = {
 };
 
 const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  hidden:  { opacity: 0, y: 40, scale: 0.96 },
   visible: {
     opacity: 1,
     y: 0,
@@ -40,8 +39,7 @@ const cardVariants: Variants = {
   },
 };
 
-/** 3D tilt card — disabled on touch pointers */
-function TiltCard({ item, index }: { item: (typeof galleryItems)[0]; index: number; key?: number }) {
+function TiltCard({ item }: { item: (typeof galleryItems)[0] }) {
   const [loaded, setLoaded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -73,7 +71,6 @@ function TiltCard({ item, index }: { item: (typeof galleryItems)[0]; index: numb
       whileHover={{ scale: 1.02, zIndex: 10 }}
       transition={{ duration: 0.25 }}
     >
-      {/* Skeleton shown until image loaded */}
       {!loaded && (
         <div className="absolute inset-0 z-10">
           <GalleryCardSkeleton />
@@ -85,7 +82,6 @@ function TiltCard({ item, index }: { item: (typeof galleryItems)[0]; index: numb
         alt={item.title}
         onLoad={() => setLoaded(true)}
         className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${loaded ? 'opacity-100' : 'opacity-0'}`}
-        referrerPolicy="no-referrer"
         style={{ transformStyle: 'preserve-3d' }}
       />
 
@@ -140,7 +136,7 @@ export default function Gallery() {
           viewport={{ amount: 0.05 }}
         >
           {galleryItems.map((item, i) => (
-            <TiltCard key={i} item={item} index={i} />
+            <TiltCard key={i} item={item} />
           ))}
         </motion.div>
       </div>

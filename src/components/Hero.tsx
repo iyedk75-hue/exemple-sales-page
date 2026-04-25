@@ -1,5 +1,5 @@
-import { useRef, useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform, type Variants } from 'motion/react';
+import { useRef, useState, useMemo, useEffect, useCallback } from 'react';
+import { motion, useScroll, useTransform, type PanInfo } from 'motion/react';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import img1 from '../img/1.jpeg';
 import img2 from '../img/2.jpeg';
@@ -89,141 +89,187 @@ function shuffleArray<T>(arr: T[]): T[] {
   return a;
 }
 
-/* ── Vespa-style horizontal card carousel ──────────────── */
+/** Shortest circular offset of index i from current */
+function normalizeOffset(i: number, current: number, total: number): number {
+  let offset = i - current;
+  if (offset > total / 2) offset -= total;
+  if (offset < -total / 2) offset += total;
+  return offset;
+}
+
+/* ── Gallery-style coverflow carousel for Hero ──────────── */
 function HeroCarousel() {
   const items = useMemo(() => shuffleArray(heroImages), []);
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
   const [paused, setPaused] = useState(false);
+  const [containerWidth, setContainerWidth] = useState(1200);
+  const containerRef = useRef<HTMLDivElement>(null);
   const n = items.length;
 
-  const goPrev = () => { setDirection(-1); setCurrent(i => (i - 1 + n) % n); };
-  const goNext = () => { setDirection(1);  setCurrent(i => (i + 1) % n); };
+  /* Measure container */
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const update = () => setContainerWidth(el.offsetWidth);
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
+    update();
+    return () => ro.disconnect();
+  }, []);
 
-  /* Auto-play — advances every 4s, pauses on hover/touch */
+  const next = useCallback(() => setCurrent(i => (i + 1) % n), [n]);
+  const prev = useCallback(() => setCurrent(i => (i - 1 + n) % n), [n]);
+
+  /* Auto-play */
   useEffect(() => {
     if (paused) return;
-    const id = setInterval(() => {
-      setDirection(1);
-      setCurrent(i => (i + 1) % n);
-    }, 4000);
+    const id = setInterval(next, 4000);
     return () => clearInterval(id);
-  }, [paused, n]);
+  }, [paused, next]);
 
-  const prevIdx = (current - 1 + n) % n;
-  const nextIdx = (current + 1) % n;
+  /* Keyboard */
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [next, prev]);
 
-  const centerVariants: Variants = {
-    enter: (dir: number) => ({ x: dir > 0 ? '55%' : '-55%', opacity: 0, scale: 0.9 }),
-    center: {
-      x: 0, opacity: 1, scale: 1,
-      transition: { type: 'spring' as const, stiffness: 300, damping: 28, mass: 0.8 },
-    },
-    exit: (dir: number) => ({
-      x: dir > 0 ? '-55%' : '55%', opacity: 0, scale: 0.9,
-      transition: { duration: 0.28, ease: [0.36, 0, 0.66, -0.2] },
-    }),
-  };
+  /* Swipe */
+  const handlePanEnd = useCallback((_e: PointerEvent, info: PanInfo) => {
+    if (info.offset.x < -50) next();
+    else if (info.offset.x > 50) prev();
+  }, [next, prev]);
+
+  /* Card geometry */
+  const isMobile = containerWidth < 640;
+  const cardWidthRatio = isMobile ? 0.82 : 0.55;
+  const cardW = containerWidth * cardWidthRatio;
+  const gap   = isMobile ? 10 : 20;
+  const getX  = (offset: number) =>
+    containerWidth / 2 + offset * (cardW + gap) - cardW / 2;
 
   return (
     <div
-      className="relative w-full select-none overflow-hidden"
+      className="relative w-full select-none"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={() => setPaused(true)}
       onTouchEnd={() => setPaused(false)}
     >
-      {/* ── Three-card peek row ── */}
-      <div className="flex items-stretch gap-3 sm:gap-4 -mx-[12%]">
+      {/* ── Coverflow track ── */}
+      <div className="relative h-[360px] sm:h-[460px] lg:h-[500px]">
 
-        {/* Left peek card */}
+        {/* Cards */}
         <motion.div
-          key={`left-${prevIdx}`}
-          className="flex-shrink-0 w-[28%] cursor-pointer relative overflow-hidden rounded-2xl sm:rounded-3xl"
-          animate={{ opacity: 0.5 }}
-          whileHover={{ opacity: 0.82 }}
-          transition={{ duration: 0.3 }}
-          onClick={goPrev}
+          ref={containerRef}
+          className="relative w-full h-full overflow-hidden"
+          onPanEnd={handlePanEnd}
         >
-          <img src={items[prevIdx].img} alt={items[prevIdx].title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <motion.div
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/92 backdrop-blur-sm shadow-xl flex items-center justify-center"
-              animate={{ scale: [1, 1.14, 1] }}
-              transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut' }}
-              whileHover={{ scale: 1.24 }}
-            >
-              <ChevronLeft className="w-5 h-5 text-[#1A1A1A]" />
-            </motion.div>
-          </div>
+          {items.map((item, i) => {
+            const offset    = normalizeOffset(i, current, n);
+            const isCenter  = offset === 0;
+            const isVisible = Math.abs(offset) <= 1;
+
+            return (
+              <motion.div
+                key={i}
+                className="absolute top-0 rounded-3xl overflow-hidden"
+                animate={{
+                  x:       getX(offset),
+                  scale:   isCenter ? 1 : 0.88,
+                  opacity: isVisible ? (isCenter ? 1 : 0.6) : 0,
+                }}
+                transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94] }}
+                style={{
+                  width:         cardW,
+                  height:        '100%',
+                  zIndex:        isCenter ? 10 : isVisible ? 5 : 0,
+                  pointerEvents: isVisible ? 'auto' : 'none',
+                }}
+              >
+                {isCenter ? (
+                  <div className="w-full h-full group relative">
+                    <img src={item.img} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent flex flex-col justify-end p-5 sm:p-7 lg:p-9">
+                      <p className="text-xs font-bold tracking-[0.25em] text-[#A67C52] mb-2 uppercase">
+                        {item.category}
+                      </p>
+                      <h3
+                        style={{ fontFamily: 'var(--font-display)' }}
+                        className="text-white text-xl sm:text-2xl lg:text-3xl font-bold italic leading-tight mb-4"
+                      >
+                        {item.title}
+                      </h3>
+                      <a
+                        href={`https://wa.me/393519631564?text=${encodeURIComponent(`Ciao! Sono interessato al progetto "${item.title}". Vorrei ricevere un preventivo gratuito. Grazie!`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 bg-[#A67C52] text-white px-4 sm:px-5 py-2.5 rounded-full text-sm font-bold
+                          opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0
+                          transition-all duration-300 ease-out
+                          hover:bg-[#E6C9A8] hover:text-[#1A1A1A] w-fit shadow-lg shadow-black/30"
+                        style={{ position: 'relative', zIndex: 20 }}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        Richiedi Preventivo
+                        <ArrowRight className="w-4 h-4" />
+                      </a>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="w-full h-full relative cursor-pointer" onClick={offset < 0 ? prev : next}>
+                    <img src={item.img} alt={item.title} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-black/20" />
+                  </div>
+                )}
+              </motion.div>
+            );
+          })}
         </motion.div>
 
-        {/* Center card */}
-        <div className="flex-1 min-w-0 relative rounded-3xl overflow-hidden shadow-2xl shadow-[#A67C52]/15">
-          <AnimatePresence custom={direction} mode="wait">
-            <motion.div
-              key={current}
-              custom={direction}
-              variants={centerVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              className="aspect-[4/3] sm:aspect-[16/9] relative"
-            >
-              <img
-                src={items[current].img}
-                alt={items[current].title}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent flex flex-col justify-end p-5 sm:p-7">
-                <p className="text-[0.6rem] sm:text-[0.65rem] text-[#E6C9A8] uppercase tracking-[0.22em] font-medium mb-1.5">
-                  {items[current].category}
-                </p>
-                <h3
-                  style={{ fontFamily: 'var(--font-display)' }}
-                  className="text-white text-lg sm:text-xl lg:text-2xl font-semibold leading-tight"
-                >
-                  {items[current].title}
-                </h3>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Right peek card */}
-        <motion.div
-          key={`right-${nextIdx}`}
-          className="flex-shrink-0 w-[28%] cursor-pointer relative overflow-hidden rounded-2xl sm:rounded-3xl"
-          animate={{ opacity: 0.5 }}
-          whileHover={{ opacity: 0.82 }}
-          transition={{ duration: 0.3 }}
-          onClick={goNext}
+        {/* Navigation arrows */}
+        <button
+          onClick={prev}
+          aria-label="Precedente"
+          className="absolute top-1/2 -translate-y-1/2 z-20
+            w-10 h-10 sm:w-12 sm:h-12 rounded-full
+            bg-white/90 backdrop-blur-sm shadow-xl
+            flex items-center justify-center
+            hover:bg-white hover:scale-110 active:scale-95
+            transition-all duration-200"
+          style={{ left: Math.max(12, (containerWidth - cardW) / 4 - 24) }}
         >
-          <img src={items[nextIdx].img} alt={items[nextIdx].title} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <motion.div
-              className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/92 backdrop-blur-sm shadow-xl flex items-center justify-center"
-              animate={{ scale: [1, 1.14, 1] }}
-              transition={{ repeat: Infinity, duration: 2.2, ease: 'easeInOut', delay: 0.6 }}
-              whileHover={{ scale: 1.24 }}
-            >
-              <ChevronRight className="w-5 h-5 text-[#1A1A1A]" />
-            </motion.div>
-          </div>
-        </motion.div>
-
+          <ChevronLeft className="w-5 h-5 text-gray-800" />
+        </button>
+        <button
+          onClick={next}
+          aria-label="Successivo"
+          className="absolute top-1/2 -translate-y-1/2 z-20
+            w-10 h-10 sm:w-12 sm:h-12 rounded-full
+            bg-white/90 backdrop-blur-sm shadow-xl
+            flex items-center justify-center
+            hover:bg-white hover:scale-110 active:scale-95
+            transition-all duration-200"
+          style={{ right: Math.max(12, (containerWidth - cardW) / 4 - 24) }}
+        >
+          <ChevronRight className="w-5 h-5 text-gray-800" />
+        </button>
       </div>
 
       {/* Dot indicators */}
-      <div className="flex justify-center gap-1.5 mt-4 sm:mt-5">
+      <div className="flex justify-center items-center gap-2 mt-5">
         {items.map((_, i) => (
           <button
             key={i}
-            onClick={() => { setDirection(i > current ? 1 : -1); setCurrent(i); }}
+            onClick={() => setCurrent(i)}
+            aria-label={`Vai alla foto ${i + 1}`}
             className={`rounded-full transition-all duration-300 ${
               i === current
-                ? 'w-5 h-1.5 bg-[#A67C52]'
-                : 'w-1.5 h-1.5 bg-[#1A1A1A]/20 hover:bg-[#1A1A1A]/40'
+                ? 'w-6 h-2.5 bg-[#A67C52]'
+                : 'w-2.5 h-2.5 bg-[#1A1A1A]/20 hover:bg-[#1A1A1A]/40'
             }`}
           />
         ))}
