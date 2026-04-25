@@ -223,6 +223,26 @@ export default function ProblemSolution() {
           ))}
         </motion.div>
 
+        {/* ── CTA ── */}
+        <motion.div
+          className="mt-12 sm:mt-14 text-center"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.4 }}
+          transition={{ duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <p className="text-white/45 text-sm mb-5">
+            Ogni problema ha una soluzione. La tua casa merita di più.
+          </p>
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 bg-[#E6C9A8] text-[#1A1A1A] px-8 py-4 rounded-full font-bold text-sm hover:bg-white transition-colors duration-300 shadow-xl shadow-black/20"
+          >
+            Risolvi il tuo problema ora
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </motion.div>
+
       </div>
     </section>
   );

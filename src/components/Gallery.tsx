@@ -139,6 +139,27 @@ export default function Gallery() {
             <TiltCard key={i} item={item} />
           ))}
         </motion.div>
+
+        {/* ── CTA after gallery ── */}
+        <motion.div
+          className="mt-12 sm:mt-16 text-center"
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ amount: 0.4 }}
+          transition={{ duration: 0.65, ease: [0.25, 0.46, 0.45, 0.94] }}
+        >
+          <p className="text-gray-400 text-sm mb-5">
+            Vuoi un risultato come questi? Il tuo progetto ci aspetta.
+          </p>
+          <a
+            href="#contact"
+            className="inline-flex items-center gap-2 bg-[#A67C52] text-white px-8 py-4 rounded-full font-bold text-sm hover:bg-[#E6C9A8] hover:text-[#1A1A1A] transition-colors duration-300 shadow-xl shadow-[#A67C52]/20"
+          >
+            Voglio un risultato così
+            <ArrowRight className="w-4 h-4" />
+          </a>
+        </motion.div>
+
       </div>
     </section>
   );

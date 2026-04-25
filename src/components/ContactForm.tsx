@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, type Variants } from 'motion/react';
 import { Phone, Mail, MapPin, ArrowRight } from 'lucide-react';
 
@@ -17,6 +17,32 @@ const leftItemVariants: Variants = {
   visible: { opacity: 1, x: 0, transition: { duration: 0.55, ease: 'easeOut' } },
 };
 
+/** Countdown to end-of-month */
+function useCountdown() {
+  const getTarget = () => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth() + 1, 1, 0, 0, 0).getTime();
+  };
+  const calc = () => {
+    const diff = Math.max(0, getTarget() - Date.now());
+    return {
+      days:    Math.floor(diff / 86400000),
+      hours:   Math.floor((diff % 86400000) / 3600000),
+      minutes: Math.floor((diff % 3600000) / 60000),
+      seconds: Math.floor((diff % 60000) / 1000),
+    };
+  };
+  const [time, setTime] = useState(calc);
+  useEffect(() => {
+    const id = setInterval(() => setTime(calc()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  return time;
+}
+
+const SLOTS_TOTAL = 5;
+const SLOTS_LEFT = 3;
+
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
@@ -25,6 +51,7 @@ export default function ContactForm() {
     projectType: 'residential',
     message: ''
   });
+  const { days, hours, minutes, seconds } = useCountdown();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,11 +76,38 @@ export default function ContactForm() {
             variants={itemVariants}
             className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-4 sm:mb-6"
           >
-            Pronto per il grande salto?
+            Trasforma la tua casa <span className="underline decoration-white/40">questa settimana</span>
           </motion.h2>
-          <motion.p variants={itemVariants} className="text-white/80 text-base sm:text-xl">
-            Prenota il tuo sopralluogo gratuito. Solo 3 slot rimasti per questo mese.
+          <motion.p variants={itemVariants} className="text-white/80 text-base sm:text-xl mb-6 sm:mb-8">
+            Sopralluogo gratuito &mdash; senza impegno. Risposta garantita in 2 ore.
           </motion.p>
+
+          {/* Countdown timer */}
+          <motion.div variants={itemVariants} className="flex flex-wrap justify-center gap-3 sm:gap-4 mb-6">
+            {[{ v: days, l: 'Giorni' }, { v: hours, l: 'Ore' }, { v: minutes, l: 'Minuti' }, { v: seconds, l: 'Secondi' }].map(({ v, l }) => (
+              <div key={l} className="bg-white/10 backdrop-blur-sm rounded-2xl px-4 py-3 min-w-[68px] text-center">
+                <div className="text-2xl sm:text-3xl font-black tabular-nums">{String(v).padStart(2, '0')}</div>
+                <div className="text-[0.6rem] font-bold uppercase tracking-widest text-white/50 mt-0.5">{l}</div>
+              </div>
+            ))}
+          </motion.div>
+
+          {/* Slots progress bar */}
+          <motion.div variants={itemVariants} className="bg-white/10 rounded-2xl px-5 py-4 max-w-xs mx-auto">
+            <div className="flex justify-between text-xs font-bold mb-2">
+              <span className="text-white/70">Slot disponibili questo mese</span>
+              <span className="text-white">{SLOTS_LEFT}/{SLOTS_TOTAL}</span>
+            </div>
+            <div className="flex gap-1.5">
+              {Array.from({ length: SLOTS_TOTAL }).map((_, i) => (
+                <div
+                  key={i}
+                  className={`h-2 flex-1 rounded-full ${i < (SLOTS_TOTAL - SLOTS_LEFT) ? 'bg-red-400' : 'bg-white/80'}`}
+                />
+              ))}
+            </div>
+            <p className="text-[0.65rem] text-white/50 mt-2">⚠️ Solo {SLOTS_LEFT} posti rimasti &mdash; offerta scade a fine mese</p>
+          </motion.div>
         </motion.div>
 
         <motion.div
@@ -217,7 +271,7 @@ export default function ContactForm() {
                 whileTap={{ scale: 0.98 }}
               >
                 <Mail className="w-6 h-6" />
-                Inviaci un'Email
+                Voglio il mio preventivo ora
                 <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
               </motion.button>
 

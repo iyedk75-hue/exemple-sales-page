@@ -46,7 +46,7 @@ export default function WhatsAppButton() {
               exit={{ opacity: 0, x: 20, scale: 0.8 }}
               transition={{ type: 'spring', stiffness: 300, damping: 20 }}
             >
-              Bisogno d'aiuto ?
+              Preventivo gratis in 60 sec →
             </motion.span>
           )}
         </AnimatePresence>

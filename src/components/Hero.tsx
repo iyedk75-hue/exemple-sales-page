@@ -53,15 +53,10 @@ const stats = [
 type WordToken = { text: string; className?: string; gold?: boolean };
 
 const h1Lines: WordToken[][] = [
-  [{ text: 'Basta' }, { text: 'pareti' }],
-  [{ text: 'anonime.' }, { text: 'Crea' }],
-  [{ text: 'un', className: 'italic font-light', gold: true }],
-  [
-    { text: 'Capolavoro', className: 'font-semibold' },
-    { text: 'in' },
-    { text: 'casa' },
-    { text: 'tua.' },
-  ],
+  [{ text: 'La' }, { text: 'tua' }, { text: 'casa,' }],
+  [{ text: 'reinventata', className: 'italic font-light', gold: true }],
+  [{ text: 'in', className: 'font-light' }, { text: '48', className: 'font-semibold' }],
+  [{ text: 'ore.', className: 'font-semibold' }],
 ];
 
 const heroImages = [
@@ -429,8 +424,8 @@ export default function Hero() {
             transition={{ duration: 0.9, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="text-sm sm:text-base text-[#1A1A1A]/45 max-w-lg mx-auto leading-relaxed mb-10 sm:mb-12 font-light"
           >
-            Realizziamo controsoffitti, pareti e arredi in cartongesso con finiture
-            di lusso e precisione millimetrica.
+            <span className="font-semibold text-[#A67C52]">+250 famiglie a Milano</span> hanno già trasformato la loro casa con noi.
+            Preventivo gratuito in 60 secondi. Garanzia scritta 10 anni.
           </motion.p>
 
           <motion.div
@@ -441,11 +436,11 @@ export default function Hero() {
           >
             <motion.a
               href="#contact"
-              className="inline-flex items-center gap-2 bg-[#1A1A1A] text-white px-8 py-4 rounded-full font-semibold text-sm tracking-wide group"
+              className="inline-flex items-center gap-2 bg-[#1A1A1A] text-white px-8 py-4 rounded-full font-semibold text-sm tracking-wide group shadow-xl shadow-black/10"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              Preventivo Gratuito
+              Voglio iniziare ora
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
             </motion.a>
             <motion.a
@@ -456,6 +451,27 @@ export default function Hero() {
             >
               Scopri i nostri lavori
             </motion.a>
+          </motion.div>
+
+          {/* Social proof trust strip */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.3, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-6"
+          >
+            <div className="flex items-center gap-1.5 text-[0.7rem] font-medium text-[#1A1A1A]/40">
+              <span className="text-[#A67C52]">★★★★★</span>
+              <span>4.9/5 su Google</span>
+            </div>
+            <span className="w-px h-3 bg-[#1A1A1A]/15 hidden sm:block" />
+            <div className="text-[0.7rem] font-medium text-[#1A1A1A]/40">
+              ✓ Garanzia scritta 10 anni
+            </div>
+            <span className="w-px h-3 bg-[#1A1A1A]/15 hidden sm:block" />
+            <div className="text-[0.7rem] font-medium text-[#1A1A1A]/40">
+              ✓ Sopralluogo gratuito
+            </div>
           </motion.div>
         </div>
 

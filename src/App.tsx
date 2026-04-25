@@ -8,6 +8,7 @@ import { AnimatePresence, motion } from 'motion/react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ProblemSolution from './components/ProblemSolution';
+import Benefits from './components/Benefits';
 import Gallery from './components/Gallery';
 import Testimonials from './components/Testimonials';
 import ContactForm from './components/ContactForm';
@@ -47,6 +48,7 @@ export default function App() {
         <Navbar />
         <Hero />
         <ProblemSolution />
+        <Benefits />
         <Gallery />
         <Testimonials />
         <ContactForm />
