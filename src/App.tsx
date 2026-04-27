@@ -13,6 +13,7 @@ import Gallery from './components/Gallery';
 import Testimonials from './components/Testimonials';
 import ContactForm from './components/ContactForm';
 import Footer from './components/Footer';
+import WhatsAppButton from './components/WhatsAppButton';
 import PageLoader from './components/PageLoader';
 import CustomCursor from './components/CustomCursor';
 
@@ -52,6 +53,7 @@ export default function App() {
         <Testimonials />
         <ContactForm />
         <Footer />
+        <WhatsAppButton />
       </motion.div>
     </>
     

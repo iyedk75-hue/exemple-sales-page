@@ -21,7 +21,7 @@ export default function WhatsAppButton() {
           <motion.button
             onClick={scrollToTop}
             aria-label="Torna in alto"
-            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-transparent border-2 border-[#1A1A1A] text-[#1A1A1A] flex items-center justify-center shadow-lg hover:bg-[#A67C52] hover:border-[#A67C52] hover:text-white transition-colors cursor-pointer"
+            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-white/20 bg-white/12 text-white backdrop-blur-md flex items-center justify-center shadow-xl shadow-black/30 hover:bg-[#A67C52] hover:border-[#A67C52] hover:text-white transition-colors cursor-pointer"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}

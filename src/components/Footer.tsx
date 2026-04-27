@@ -8,8 +8,8 @@ const slideLeft: Variants = {
 };
 
 const contacts = [
-  { Icon: Phone, text: '+39 02 1234 5678', href: 'tel:+390212345678' },
-  { Icon: Mail, text: 'info@elitecartongesso.it', href: 'mailto:info@elitecartongesso.it' },
+  { Icon: Phone, text: '+393519631564', href: 'tel:+393519631564' },
+  { Icon: Mail, text: 'mahmoudsassi2077@gmail.com', href: 'mailto:mahmoudsassi2077@gmail.com' },
 ];
 
 export default function Footer() {
